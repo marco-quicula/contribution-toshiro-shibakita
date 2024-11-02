@@ -1,0 +1,70 @@
+services:
+    mysql:
+        image: mysql:5.7
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: pwd010203
+            MYSQL_DATABASE: mydb
+            MYSQL_USER: myuser
+            MYSQL_PASSWORD: pwd010203
+        volumes:
+            - mysql-data:/var/lib/mysql
+            - ./env/db/initdb:/docker-entrypoint-initdb.d
+        networks:
+            - mynetwork
+    webservice01:
+        image: phpstorm/php-73-apache-xdebug-27
+        ports:
+            - "8081:80"
+        volumes:
+            - ./:/var/www/html
+        environment:
+            XDEBUG_CONFIG: remote_host=host.docker.internal
+        depends_on:
+            - mysql
+        networks:
+            - mynetwork
+    webservice02:
+        image: phpstorm/php-73-apache-xdebug-27
+        ports:
+            - "8082:80"
+        volumes:
+            - ./:/var/www/html
+        environment:
+            XDEBUG_CONFIG: remote_host=host.docker.internal
+        depends_on:
+            - mysql
+        networks:
+            - mynetwork
+    webservice03:
+        image: phpstorm/php-73-apache-xdebug-27
+        ports:
+            - "8083:80"
+        volumes:
+            - ./:/var/www/html
+        environment:
+            XDEBUG_CONFIG: remote_host=host.docker.internal
+        depends_on:
+            - mysql
+        networks:
+            - mynetwork
+    nginx:
+        image: nginx
+        ports:
+            - "80:80"
+        volumes:
+            - ./env/nginx/nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+            - webservice01
+            - webservice02
+            - webservice03
+        networks:
+            - mynetwork
+
+volumes:
+    mysql-data:
+
+networks:
+    mynetwork:
+        driver: bridge

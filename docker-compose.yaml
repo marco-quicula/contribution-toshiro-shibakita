@@ -4,10 +4,10 @@ services:
         ports:
             - "3306:3306"
         environment:
-            MYSQL_ROOT_PASSWORD: pwd010203
-            MYSQL_DATABASE: mydb
-            MYSQL_USER: myuser
-            MYSQL_PASSWORD: pwd010203
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         volumes:
             - mysql-data:/var/lib/mysql
             - ./env/db/initdb:/docker-entrypoint-initdb.d
@@ -21,6 +21,10 @@ services:
             - ./:/var/www/html
         environment:
             XDEBUG_CONFIG: remote_host=host.docker.internal
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            SERVER_NAME: mysql
         depends_on:
             - mysql
         networks:
@@ -33,6 +37,10 @@ services:
             - ./:/var/www/html
         environment:
             XDEBUG_CONFIG: remote_host=host.docker.internal
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            SERVER_NAME: mysql
         depends_on:
             - mysql
         networks:
@@ -45,6 +53,10 @@ services:
             - ./:/var/www/html
         environment:
             XDEBUG_CONFIG: remote_host=host.docker.internal
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            SERVER_NAME: mysql
         depends_on:
             - mysql
         networks:
